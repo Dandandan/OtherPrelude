@@ -6,13 +6,13 @@ module OtherPrelude.Maybe where
 @docs Maybe
 
 # Taking Maybes apart
-@docs maybe, isJust, isNothing
+@docs maybe, map, just, isJust, isNothing
 
 # Maybes and Lists
 @docs justs
 -}
 
-import Basics (not, (.))
+import Basics (not, (.), id, always)
 import List (foldr)
 
 {-| The Maybe datatype. Useful when a computation may or may not
@@ -29,21 +29,36 @@ function to the associated value.
       isPositive maybeInt = maybe False (\n -> n > 0) maybeInt
 
       map : (a -> b) -> Maybe a -> Maybe b
-      map f m = maybe Nothing (\x -> Just (f x)) m
+      map f m = maybe Nothing (Just . f) m
 -}
 maybe : b -> (a -> b) -> Maybe a -> b
 maybe b f m = case m of
-                Just v  -> f v
-                Nothing -> b
+    Just v  -> f v
+    Nothing -> b
 
-{-| Check if a maybe happens to be a `Just`.
+{-| Transform a `Maybe a` to a `Maybe b`
+
+      map (\x -> x * 2) (Just 1) == Just 2
+      map (\x -> x * 2) Nothing  == Nothing
+-}
+map : (a -> b) -> Maybe a -> Maybe b
+map f = maybe Nothing (Just . f)
+
+{-| Return the value in a `Just`, or the default if given `Nothing`.
+    just 0 (Just 10) == 10
+    just 0 Nothing   == 0
+-}
+just : a -> Maybe a -> a
+just a = maybe a id
+
+{-| Check if a `Maybe` happens to be a `Just`.
 
       isJust (Just 42) == True
       isJust (Just []) == True
       isJust Nothing   == False
 -}
 isJust : Maybe a -> Bool
-isJust = maybe False (\_ -> True)
+isJust = maybe False (always True)
 
 {-| Check if constructed with `Nothing`.
 

@@ -6,7 +6,7 @@ module OtherPrelude.Either where
 @docs Either
 
 # Taking Eithers apart
-@docs either, isLeft, isRight
+@docs either, map, left, right, isLeft, isRight
 
 # Eithers and Lists
 @docs lefts, rights, partition
@@ -39,22 +39,25 @@ either f g e = case e of
     Right y -> g y
 
 {-| Applies a function to a `Right`, the `Left` stays intact.
-    map (\x -> x * 2) (Right 1)      == Right 2
-    map (\x -> x * 2) (Left "Error") == Left "Error"
+
+      map (\x -> x * 2) (Right 1)      == Right 2
+      map (\x -> x * 2) (Left "Error") == Left "Error"
 -}
 map : (a -> b) -> Either err a -> Either err b
-map f e = either Left (Right . f) e
+map f = either Left (Right . f)
 
 {-| Get the value from the `Left` or a default value.
-    left "" (Left "Error")  == "Error"
-    left "" (Right 10)      == ""
+
+      left "" (Left "Error")  == "Error"
+      left "" (Right 10)      == ""
 -}
 left : a -> Either a b -> a
 left a = either id (always a)
 
 {-| Get the value from the `Right` or a default value.
-    right 0 (Left "Error")  == 0
-    right 0 (Right 10)      == 10
+
+      right 0 (Left "Error")  == 0
+      right 0 (Right 10)      == 10
 -}
 right : b -> Either a b -> b
 right a = either (always a) id
@@ -80,14 +83,14 @@ isRight = not . isLeft
       lefts [Left 3, Right 'a', Left 5, Right "eight"] == [3,5]
 -}
 lefts : [Either a b] -> [a]
-lefts es = List.foldr consLeft [] es
+lefts = List.foldr consLeft []
 
 {-| Keep only the values held in `Right` values.
 
       rights [Left 3, Right 'a', Left 5, Right 'b'] == ['a','b']
 -}
 rights : [Either a b] -> [b]
-rights es = List.foldr consRight [] es
+rights = List.foldr consRight []
 
 {-| Split into two lists, lefts on the left and rights on the right. So we
 have the equivalence: `(partition es == (lefts es, rights es))`
@@ -95,7 +98,7 @@ have the equivalence: `(partition es == (lefts es, rights es))`
       partition [Left 3, Right 'a', Left 5, Right 'b'] == ([3,5],['a','b'])
 -}
 partition : [Either a b] -> ([a],[b])
-partition es = List.foldr consEither ([],[]) es
+partition = List.foldr consEither ([],[])
 
 consLeft e vs = either (\v -> v::vs) (always vs) e
 
