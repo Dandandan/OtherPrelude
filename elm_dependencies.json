@@ -1,11 +1,14 @@
 {
-    "version": "0.0.1",
+    "version": "0.0.7",
     "summary": "A playground for alternative Elm libraries",
     "description": "A playground for alternative Elm libraries",
     "license": "BSD3",
     "exposed-modules":
     [
-        "OtherPrelude.Maybe"
+        "OtherPrelude.Maybe",
+        "OtherPrelude.Either",
+        "OtherPrelude.Mouse",
+        "OtherPrelude.Window"
     ],
     "elm-version": "0.12.3",
     "dependencies": {},
