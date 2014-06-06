@@ -1,0 +1,13 @@
+{
+    "version": "0.0.1",
+    "summary": "A playground for alternative Elm libraries",
+    "description": "A playground for alternative Elm libraries",
+    "license": "BSD3",
+    "exposed-modules":
+    [
+        "OtherPrelude.Maybe"
+    ],
+    "elm-version": "0.12.3",
+    "dependencies": {},
+    "repository": "https://github.com/Dandandan/OtherPrelude.git"
+}
